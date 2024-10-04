@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get IP and Send to Email</title>
+</head>
+<body>
+    <h1>Согласиться и отправить IP</h1>
+    <button id="sendIP">Согласиться</button>
+
+    <script>
+        document.getElementById('sendIP').addEventListener('click', function() {
+            fetch('https://api.ipify.org?format=json')
+            .then(response => response.json())
+            .then(data => {
+                // Отправляем IP на сервер с помощью fetch-запроса
+                fetch('send_ip.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ ip: data.ip }),
+                })
+                .then(response => response.text())
+                .then(result => {
+                    alert('IP успешно отправлен!');
+                })
+                .catch(error => {
+                    console.error('Ошибка:', error);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
